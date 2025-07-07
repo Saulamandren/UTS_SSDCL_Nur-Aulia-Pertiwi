@@ -1,5 +1,11 @@
 pipeline {
     agent any
+    
+    tools {
+        // PASTIKAN NAMA DI SINI SAMA PERSIS DENGAN YANG ANDA SALIN DARI LANGKAH 1
+        hudson.plugins.sonar.SonarRunnerInstallation 'SonarScanner'
+    }
+
     environment {
         CI_ENV = "testing"
         PHP_VERSION = "8.1"
@@ -7,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                cleanWs()
+                cleanWs() 
                 git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCL_Nur-Aulia-Pertiwi.git'
             }
         }
@@ -19,14 +25,13 @@ pipeline {
         stage('Static Code Analysis (SAST)') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    // Kembali ke perintah sederhana
-                    bat 'sonar-scanner'
+                    // Perintah ini sekarang akan menggunakan path lengkap dari tool yang diinstal
+                    bat '"%SCANNER_HOME%/bin/sonar-scanner.bat"'
                 }
             }
         }
         stage('Unit Test') {
             steps {
-                // Path untuk Windows
                 bat 'vendor\\bin\\phpunit tests'
             }
         }
