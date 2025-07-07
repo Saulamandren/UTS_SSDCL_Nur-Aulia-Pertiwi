@@ -2,11 +2,11 @@ pipeline {
     agent any
     
     // Menambahkan definisi tool yang akan digunakan
-    tools {
-        // Pastikan nama 'SonarScanner-latest' sama persis
-        // dengan nama yang Anda buat di Global Tool Configuration
-       hudson.plugins.sonar.SonarRunnerInstallation 'SonarScanner'
-    }
+tools {
+    // Pastikan nama 'SonarScanner' sama persis 
+    // dengan nama yang Anda buat di Global Tool Configuration
+    hudson.plugins.sonar.SonarRunnerInstallation 'SonarScanner'
+}
 
     environment {
         CI_ENV = "testing"
