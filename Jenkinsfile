@@ -8,7 +8,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 cleanWs() 
-                git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCI_Nur-Aulia-Pertiwi.git'
+                git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCL_Nur-Aulia-Pertiwi.git'
             }
         }
         stage('Install Dependencies') {
