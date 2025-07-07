@@ -8,6 +8,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Ganti URL ini dengan URL repositori Git Anda
+                cleanWs() 
                 git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCL_Nur-Aulia-Pertiwi.git'
             }
         }
