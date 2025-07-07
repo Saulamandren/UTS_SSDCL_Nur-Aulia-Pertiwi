@@ -7,28 +7,28 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Ganti URL ini dengan URL repositori Git Anda
                 cleanWs() 
-                git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCL_Nur-Aulia-Pertiwi.git'
+                git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCI_Nur-Aulia-Pertiwi.git'
             }
         }
         stage('Install Dependencies') {
             steps {
-                sh 'composer install'
+                // Menggunakan 'bat' untuk Windows
+                bat 'composer install'
             }
         }
         stage('Static Code Analysis (SAST)') {
             steps {
-                // Perintah ini akan menggunakan 'sonar-project.properties'
-                // Pastikan SONAR_TOKEN sudah ada di Jenkins Credentials
                 withSonarQubeEnv('SonarQube') {
-                    sh 'sonar-scanner'
+                    // Menggunakan 'bat' untuk Windows
+                    bat 'sonar-scanner'
                 }
             }
         }
         stage('Unit Test') {
             steps {
-                sh './vendor/bin/phpunit tests'
+                // Menggunakan 'bat' untuk Windows
+                bat 'vendor\\bin\\phpunit tests' // Gunakan backslash (\) untuk path di Windows
             }
         }
     }
@@ -40,10 +40,7 @@ pipeline {
             echo 'Pipeline berhasil'
         }
         failure {
-            // Contoh notifikasi email jika gagal
-            mail to: 'dev@yourcompany.com',
-                subject: "Pipeline Gagal: ${currentBuild.fullDisplayName}",
-                body: "Build gagal. Periksa Jenkins untuk log error di ${env.BUILD_URL}"
+            echo 'Build gagal. Periksa log untuk detail.'
         }
     }
 }
