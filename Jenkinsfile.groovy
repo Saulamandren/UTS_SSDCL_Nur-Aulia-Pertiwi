@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    environment {
+        CI_ENV = "testing"
+        PHP_VERSION = "8.1"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                // Ganti URL ini dengan URL repositori Git Anda
+                git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCL_Nur-Aulia-Pertiwi.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'composer install'
+            }
+        }
+        stage('Static Code Analysis (SAST)') {
+            steps {
+                // Perintah ini akan menggunakan 'sonar-project.properties'
+                // Pastikan SONAR_TOKEN sudah ada di Jenkins Credentials
+                withSonarQubeEnv('SonarQube') {
+                    sh 'sonar-scanner'
+                }
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                sh './vendor/bin/phpunit tests'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        success {
+            echo 'Pipeline berhasil'
+        }
+        failure {
+            // Contoh notifikasi email jika gagal
+            mail to: 'dev@yourcompany.com',
+                subject: "Pipeline Gagal: ${currentBuild.fullDisplayName}",
+                body: "Build gagal. Periksa Jenkins untuk log error di ${env.BUILD_URL}"
+        }
+    }
+}
