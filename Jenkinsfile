@@ -1,5 +1,13 @@
 pipeline {
     agent any
+    
+    // Menambahkan definisi tool yang akan digunakan
+    tools {
+        // Pastikan nama 'SonarScanner-latest' sama persis
+        // dengan nama yang Anda buat di Global Tool Configuration
+        sonarScanner 'SonarScanner'
+    }
+
     environment {
         CI_ENV = "testing"
         PHP_VERSION = "8.1"
@@ -13,22 +21,20 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                // Menggunakan 'bat' untuk Windows
                 bat 'composer install'
             }
         }
         stage('Static Code Analysis (SAST)') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    // Menggunakan 'bat' untuk Windows
-                    bat 'sonar-scanner'
+                    // Menggunakan variabel SCANNER_HOME yang disediakan oleh 'tools'
+                    bat '"%SCANNER_HOME%/bin/sonar-scanner.bat"'
                 }
             }
         }
         stage('Unit Test') {
             steps {
-                // Menggunakan 'bat' untuk Windows
-                bat 'vendor\\bin\\phpunit tests' // Gunakan backslash (\) untuk path di Windows
+                bat 'vendor\\bin\\phpunit tests'
             }
         }
     }
