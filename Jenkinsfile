@@ -1,13 +1,5 @@
 pipeline {
     agent any
-    
-    // Menambahkan definisi tool yang akan digunakan
-tools {
-    // Pastikan nama 'SonarScanner' sama persis 
-    // dengan nama yang Anda buat di Global Tool Configuration
-    hudson.plugins.sonar.SonarRunnerInstallation 'SonarScanner'
-}
-
     environment {
         CI_ENV = "testing"
         PHP_VERSION = "8.1"
@@ -15,7 +7,7 @@ tools {
     stages {
         stage('Checkout') {
             steps {
-                cleanWs() 
+                cleanWs()
                 git branch: 'main', url: 'https://github.com/Saulamandren/UTS_SSDCL_Nur-Aulia-Pertiwi.git'
             }
         }
@@ -27,13 +19,14 @@ tools {
         stage('Static Code Analysis (SAST)') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    // Menggunakan variabel SCANNER_HOME yang disediakan oleh 'tools'
-                    bat '"%SCANNER_HOME%/bin/sonar-scanner.bat"'
+                    // Kembali ke perintah sederhana
+                    bat 'sonar-scanner'
                 }
             }
         }
         stage('Unit Test') {
             steps {
+                // Path untuk Windows
                 bat 'vendor\\bin\\phpunit tests'
             }
         }
