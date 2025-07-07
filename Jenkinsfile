@@ -5,7 +5,7 @@ pipeline {
     tools {
         // Pastikan nama 'SonarScanner-latest' sama persis
         // dengan nama yang Anda buat di Global Tool Configuration
-        sonarScanner 'SonarScanner'
+       hudson.plugins.sonar.SonarRunnerInstallation 'SonarScanner'
     }
 
     environment {
